@@ -26,7 +26,7 @@ def menu(events):
             pygame.quit()
         case "hover":
             button(True,True,"Exit",(255,255,150)).render(True,y_coor,events)
-
+ 
 def game(events):
     window.fill((50,50,50))
     player.handle(events)
