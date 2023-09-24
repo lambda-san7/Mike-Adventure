@@ -35,6 +35,8 @@ clock = pygame.time.Clock()
 
 fps = 60
 
+delta_time = clock.tick(fps)/1000
+
 ######################
 # EVENT
 ######################
@@ -178,7 +180,7 @@ class sprites:
 class camera:
     x = 0
     y = 0
-    scale = 10
+    scale = 5
 
 #########################
 # CURSOR

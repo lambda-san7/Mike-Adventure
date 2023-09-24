@@ -3,6 +3,7 @@
 ######################
 
 import pygame
+import defaults
 from defaults import window, clock, running, event, fps, text, button
 from character import player
 
@@ -38,7 +39,7 @@ scene = game
 ######################
 
 while 1:
-    clock.tick(fps)
+    defaults.delta_time = clock.tick(fps)/1000
     events = event()
     scene(events)
     pygame.display.update()
