@@ -6,6 +6,7 @@ import pygame
 import defaults
 from defaults import window, clock, running, event, fps, text, button
 from character import player
+from map import curr_map
 
 ######################
 # SCENES
@@ -31,6 +32,7 @@ def menu(events):
 def game(events):
     window.fill((50,50,50))
     player.handle(events)
+    curr_map.render()
 
 scene = game
 
