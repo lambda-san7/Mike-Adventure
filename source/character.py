@@ -70,11 +70,13 @@ class character:
         if events[0][pygame.K_w]:
             pass
         if events[0][pygame.K_a]:
+            self.facing = "left"
             self.x_velocity = -self.speed * camera.scale
             print()
         if events[0][pygame.K_s]:
             pass
         if events[0][pygame.K_d]:
+            self.facing = "right"
             self.x_velocity = self.speed * camera.scale
 
 player = character()

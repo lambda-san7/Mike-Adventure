@@ -169,7 +169,7 @@ class center:
 
 class sprites:
     def new(file):
-        return pygame.image.load(f"{dir_path}/assets/{file}")
+        return pygame.image.load(f"{dir_path}/assets/{file}").convert_alpha()
 
 #########################
 # CAMERA

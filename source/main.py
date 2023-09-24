@@ -37,9 +37,8 @@ scene = game
 # LOOP
 ######################
 
-while running:
+while 1:
     clock.tick(fps)
     events = event()
-    window.fill((0,0,0))
     scene(events)
     pygame.display.update()
