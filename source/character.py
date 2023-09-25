@@ -26,19 +26,23 @@ class collisions:
 
         if target.y + target.h < ground: # Air
             self.air = True
-  #      if target.y + target.h == ground: # On ground
-   #         self.ground = True
-    #    if target.y + target.h > ground: # Below Ground
-     #       self.under_ground = True
+        if target.y + target.h == ground: # On ground
+            self.ground = True
+        if target.y + target.h > ground: # Below Ground
+            self.under_ground = True
 
-        for index_y, y in enumerate(curr_map.matrix):
-            for index_x, x in enumerate(curr_map.matrix[index_y]):
-                if ((target.x + target.w >= index_x) and
-                    (target.x <= index_x + 10) and
-                    (target.y + target.h >= index_y) and
-                    (target.y <= index_y + 10)):
-                        target.y = index_y + target.h
-                        target.velocity = 0
+    #    for index_y, y in enumerate(curr_map.matrix):
+     #       for index_x, x in enumerate(curr_map.matrix[index_y]):
+      #          if x == "#":
+       #             if ((target.x + target.w >= (index_x*10)) or
+        #                (target.x <= (index_x*10)+10)):
+         #               if ((target.y + target.h >= (index_y*10)) or
+          #                  (target.y <= (index_y*10)+10)):
+           #                 print(f"colliding with {x}")
+            #                target.y = index_y + target.h
+             #               target.velocity = 0
+              #  if x == " ":
+               #     pass
         
         return [self.ground,self.air,self.under_ground]
 
@@ -105,19 +109,21 @@ class character:
             self.x_velocity += 1
         if math.floor(self.x_velocity) == 0:
             self.x_velocity = 0
-        
-        self.y -= self.y_velocity+(self.y_velocity*delta_time)
 
         ground = 40
+
+        self.y -= self.y_velocity+(self.y_velocity*delta_time)
+
+        #print(self.collisions.get(self)[2])        
         
         if self.collisions.get(self)[1]: # Air
             self.y_velocity -= 0.5
 
-        if self.collisions.get(self)[0]: # On ground
-            self.y_velocity = 0
-
         if self.collisions.get(self)[2]: # Below Ground
             self.y = ground - self.h
+            self.y_velocity = 0
+
+        if self.collisions.get(self)[0]: # On ground
             self.y_velocity = 0
             
     def controller(self,events):
@@ -126,7 +132,7 @@ class character:
         if events[0][pygame.K_a]:
             self.facing = "left"
             self.x_velocity = -self.speed
-            print()
+            #print()
         if events[0][pygame.K_s]:
             pass
         if events[0][pygame.K_d]:
