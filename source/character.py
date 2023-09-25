@@ -15,23 +15,21 @@ class collisions:
     def __init__(self):
         self.ground = False
         self.air = False
-        self.under_ground_x = False
-        self.under_ground_y = False
+        self.under_ground = False
     def get(self,target):
 
         self.ground = False
         self.air = False
-        self.under_ground_x = False
-        self.under_ground_y = False
+        self.under_ground = False
 
         ground = 40
 
         if target.y + target.h < ground: # Air
             self.air = True
-      #  if target.y + target.h == ground: # On ground
-       #     self.ground = True
-        #if target.y + target.h > ground: # Below Ground
-         #   self.under_ground_y = True
+  #      if target.y + target.h == ground: # On ground
+   #         self.ground = True
+    #    if target.y + target.h > ground: # Below Ground
+     #       self.under_ground = True
 
         for index_y, y in enumerate(curr_map.matrix):
             for index_x, x in enumerate(curr_map.matrix[index_y]):
@@ -39,9 +37,10 @@ class collisions:
                     (target.x <= index_x + 10) and
                     (target.y + target.h >= index_y) and
                     (target.y <= index_y + 10)):
-                        self.under_ground_y = True
+                        target.y = index_y + target.h
+                        target.velocity = 0
         
-        return [self.ground,self.air,self.under_ground_x,self.under_ground_y]
+        return [self.ground,self.air,self.under_ground]
 
 ######################
 # SPRITE LIST
@@ -78,8 +77,6 @@ class character:
         self.collisions = collisions()
  
     def handle(self,events):
-        camera.x = self.x - ((pygame.display.Info().current_w / camera.scale) / 2)
-        camera.y = self.y - ((pygame.display.Info().current_h / camera.scale) / 2)
         self.controller(events)
         self.physics()
         self.render()
@@ -101,8 +98,6 @@ class character:
 
     def physics(self):
         self.x += self.x_velocity+(self.x_velocity*delta_time)
-        if self.collisions.get(self)[3]:
-            self.x -= self.x_velocity+(self.x_velocity*delta_time)
 
         if self.x_velocity > 0:
             self.x_velocity -= 1
@@ -115,13 +110,14 @@ class character:
 
         ground = 40
         
-        if self.collisions.get(self)[0]: # On ground
-            self.y_velocity = 0
-
         if self.collisions.get(self)[1]: # Air
             self.y_velocity -= 0.5
 
-        if self.collisions.get(self)[3]: # Below Ground
+        if self.collisions.get(self)[0]: # On ground
+            self.y_velocity = 0
+
+        if self.collisions.get(self)[2]: # Below Ground
+            self.y = ground - self.h
             self.y_velocity = 0
             
     def controller(self,events):
