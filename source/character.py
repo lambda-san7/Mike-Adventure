@@ -31,18 +31,21 @@ class collisions:
         if target.y + target.h > ground: # Below Ground
             self.under_ground = True
 
-    #    for index_y, y in enumerate(curr_map.matrix):
-     #       for index_x, x in enumerate(curr_map.matrix[index_y]):
-      #          if x == "#":
-       #             if ((target.x + target.w >= (index_x*10)) or
-        #                (target.x <= (index_x*10)+10)):
-         #               if ((target.y + target.h >= (index_y*10)) or
-          #                  (target.y <= (index_y*10)+10)):
-           #                 print(f"colliding with {x}")
-            #                target.y = index_y + target.h
-             #               target.velocity = 0
-              #  if x == " ":
-               #     pass
+        for index_y, y in enumerate(curr_map.matrix):
+            for index_x, x in enumerate(curr_map.matrix[index_y]):
+                if x == "#":
+                    if ((target.x <= (index_x * 10) + 10) and
+                        (target.x + target.w >= (index_x * 10)) and
+
+                        (target.y < (index_y * 10) + 10) and
+                        (target.y + target.h > (index_y * 10))
+                        ):
+                            print(f"colliding with {x}")
+                            target.y = (index_y * 10) + target.h
+                            target.y_velocity = 0
+                            self.ground = True
+                if x == " ":
+                    pass
         
         return [self.ground,self.air,self.under_ground]
 
