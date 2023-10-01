@@ -30,7 +30,7 @@ class collisions:
             self.ground = True
         if target.y + target.h > ground: # Below Ground
             self.under_ground = True
-
+ 
         for index_y, y in enumerate(curr_map.matrix):
             for index_x, x in enumerate(curr_map.matrix[index_y]):
                 if x == "#":
