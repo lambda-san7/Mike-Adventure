@@ -33,14 +33,13 @@ class collisions:
  
         for index_y, y in enumerate(curr_map.matrix):
             for index_x, x in enumerate(curr_map.matrix[index_y]):
-                if x == "#":
+                if x == "#" or x == "&":
                     if ((target.x <= (index_x * 10) + 10) and
                         (target.x + target.w >= (index_x * 10)) and
 
                         (target.y < (index_y * 10) + 10) and
                         (target.y + target.h > (index_y * 10))
                         ):
-                            print(f"colliding with {x}")
                             target.y = (index_y * 10) - target.h
                             target.y_velocity = 0
                             self.ground = True
@@ -84,6 +83,10 @@ class character:
         self.collisions = collisions()
  
     def handle(self,events):
+        camera.x = self.x - ((pygame.display.Info().current_w / camera.scale) / 2)
+        camera.y = 50 / camera.scale
+        #camera.y = ((pygame.display.Info().current_h / camera.scale) - (5 * camera.scale))
+        print(camera.x)
         self.controller(events)
         self.physics()
         self.render()

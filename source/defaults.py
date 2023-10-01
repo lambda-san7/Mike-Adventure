@@ -180,7 +180,7 @@ class sprites:
 class camera:
     x = 0
     y = 0
-    scale = 5
+    scale = 10
 
 #########################
 # CURSOR
