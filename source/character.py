@@ -41,7 +41,7 @@ class collisions:
                         (target.y + target.h > (index_y * 10))
                         ):
                             print(f"colliding with {x}")
-                            target.y = (index_y * 10) + target.h
+                            target.y = (index_y * 10) - target.h
                             target.y_velocity = 0
                             self.ground = True
                 if x == " ":
