@@ -169,10 +169,6 @@ class center:
 # SPRITES
 #########################
 
-class sprites:
-    def new(file):
-        return pygame.image.load(f"{dir_path}/assets/{file}").convert_alpha()
-    
 class sprite:
     def __init__(self,file):
         self.img = pygame.image.load(f"{dir_path}/assets/{file}").convert_alpha()
@@ -208,3 +204,17 @@ class camera:
 #        sprites.render(self.curr, pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], 20, 20)
 
 #cursor = cursor_class()
+
+#########################
+# COLLISION
+#########################
+
+class colliding:
+    def point(x,y,w,h,px,py):
+        if ((px <= x + w) and
+            (px >= x) and
+            (py <= y + h) and
+            (py >= y)
+        ):
+            return True
+        return False
