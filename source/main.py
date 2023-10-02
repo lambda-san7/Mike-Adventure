@@ -31,6 +31,7 @@ def menu(events):
  
 def game(events):
     window.fill((50,50,50))
+    curr_map.backdrop()
     player.handle(events)
     curr_map.render()
 

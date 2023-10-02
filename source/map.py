@@ -4,7 +4,7 @@
 
 import pygame
 import math
-from defaults import window, sprites, camera, delta_time
+from defaults import window, sprite, camera, delta_time
 
 ######################
 # BLOCKS
@@ -12,10 +12,15 @@ from defaults import window, sprites, camera, delta_time
 
 class blocks_class:
     def __init__(self):
-        self.grass = sprites.new("grass.gif")
-        self.dirt = sprites.new("dirt.gif")
+        self.grass = sprite("grass.gif")
+        self.dirt = sprite("dirt.gif")
+
+class backdrops_class:
+    def __init__(self):
+        self.sky = sprite("sky.gif")
 
 blocks = blocks_class()
+backdrops = backdrops_class()
 
 ######################
 # MAP
@@ -30,26 +35,34 @@ class map:
             [" "," "," "," "," ","#","&","&"," "," "," "," "],
             ["#","#","#","#","#","&","&","&","#","#","#","#"],
         ]
+    def backdrop(self):
+        backdrops.sky.render(
+            False,
+            0,
+            0,
+            pygame.display.Info().current_w,
+            pygame.display.Info().current_w
+        )
     def render(self):
         for index_y, y in enumerate(self.matrix):
             for index_x, x in enumerate(self.matrix[index_y]):
                 if x == " ":
                     continue
                 if x == "#":
-                    window.blit(
-                        pygame.transform.scale(
-                            blocks.grass,
-                            (10 * camera.scale, 10 * camera.scale)
-                        ),
-                        (((index_x*10) - camera.x) * camera.scale,((index_y*10) - camera.y) * camera.scale)
+                    blocks.grass.render(
+                        False,
+                        ((index_x*10) - camera.x) * camera.scale,
+                        ((index_y*10) - camera.y) * camera.scale,
+                        10 * camera.scale,
+                        10 * camera.scale
                     )
                 if x == "&":
-                    window.blit(
-                        pygame.transform.scale(
-                            blocks.dirt,
-                            (10 * camera.scale, 10 * camera.scale)
-                        ),
-                        (((index_x*10) - camera.x) * camera.scale,((index_y*10) - camera.y) * camera.scale)
+                    blocks.dirt.render(
+                        False,
+                        ((index_x*10) - camera.x) * camera.scale,
+                        ((index_y*10) - camera.y) * camera.scale,
+                        10 * camera.scale,
+                        10 * camera.scale
                     )
 
 testing = map()

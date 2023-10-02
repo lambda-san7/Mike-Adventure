@@ -172,6 +172,20 @@ class center:
 class sprites:
     def new(file):
         return pygame.image.load(f"{dir_path}/assets/{file}").convert_alpha()
+    
+class sprite:
+    def __init__(self,file):
+        self.img = pygame.image.load(f"{dir_path}/assets/{file}").convert_alpha()
+    def render(self,flip,x,y,w,h):
+        window.blit(
+            pygame.transform.scale(
+                pygame.transform.flip(
+                    self.img,flip,False
+                ),
+                (w, h)
+            ),
+            (x,y)
+        )
 
 #########################
 # CAMERA
@@ -180,7 +194,7 @@ class sprites:
 class camera:
     x = 0
     y = 0
-    scale = 10
+    scale = 5
 
 #########################
 # CURSOR

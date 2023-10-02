@@ -4,7 +4,7 @@
 
 import pygame
 import math
-from defaults import window, sprites, camera, delta_time
+from defaults import window, sprite, camera, delta_time
 from map import curr_map
 
 ######################
@@ -15,38 +15,49 @@ class collisions:
     def __init__(self):
         self.ground = False
         self.air = False
-        self.under_ground = False
+        self.top_ground = False
+        self.bottom_ground = False
+        self.left_ground = False
+        self.right_ground = False
     def get(self,target):
 
         self.ground = False
         self.air = False
-        self.under_ground = False
+        self.top_ground = False
+        self.bottom_ground = False
+        self.left_ground = False
+        self.right_ground = False
 
-        ground = 40
+   #     ground = 40
 
-        if target.y + target.h < ground: # Air
-            self.air = True
-        if target.y + target.h == ground: # On ground
-            self.ground = True
-        if target.y + target.h > ground: # Below Ground
-            self.under_ground = True
+#        if target.y + target.h < ground: # Air
+ #           self.air = True
+  #      if target.y + target.h == ground: # On ground
+   #         self.ground = True
+    #    if target.y + target.h > ground: # Below Ground
+     #       self.top_ground = True
  
         for index_y, y in enumerate(curr_map.matrix):
             for index_x, x in enumerate(curr_map.matrix[index_y]):
                 if x == "#" or x == "&":
+        #            if ((target.x <= (index_x * 10) + 10) and
+         #               (target.x + target.w >= (index_x * 10)) and
+
+#                        (target.y < (index_y * 10) + 10) and
+ #                       (target.y + target.h > (index_y * 10))
+  #                      ):
                     if ((target.x <= (index_x * 10) + 10) and
                         (target.x + target.w >= (index_x * 10)) and
 
-                        (target.y < (index_y * 10) + 10) and
-                        (target.y + target.h > (index_y * 10))
+                        (target.y + 10 < (index_y * 10) + 10) and
+                        ((target.y + 10) + target.h > (index_y * 10))
                         ):
-                            target.y = (index_y * 10) - target.h
-                            target.y_velocity = 0
-                            self.ground = True
+                            self.top_ground = True
+                            self.air = False
                 if x == " ":
-                    pass
+                    self.air = True
         
-        return [self.ground,self.air,self.under_ground]
+        return [self.ground,self.air,self.top_ground,self.bottom_ground,self.left_ground,self.right_ground]
 
 ######################
 # SPRITE LIST
@@ -55,11 +66,11 @@ class collisions:
 class sprite_list:
     def __init__(self):
         self.idle = [
-            sprites.new("player/")
+            sprite("player/")
         ]
 
         self.idle = [
-            sprites.new("player/")
+            sprite("player/")
         ]
 
 ######################
@@ -70,7 +81,7 @@ class character:
     def __init__(self):
         #self.sprites = sprite_list()
         #self.sprite_list = self.sprites.idle
-        self.sprite = sprites.new("character/mike/idle.gif")
+        self.sprite = sprite("character/mike/idle.gif")
         self.x = 0
         self.y = 0
         self.w = 10
@@ -84,9 +95,9 @@ class character:
  
     def handle(self,events):
         camera.x = self.x - ((pygame.display.Info().current_w / camera.scale) / 2)
-        camera.y = 50 / camera.scale
+        camera.y = (pygame.display.Info().current_h / camera.scale) - ((50 * camera.scale) / 2)
+        print(f"player: {player.y} // camera: {camera.y}")
         #camera.y = ((pygame.display.Info().current_h / camera.scale) - (5 * camera.scale))
-        print(camera.x)
         self.controller(events)
         self.physics()
         self.render()
@@ -96,17 +107,16 @@ class character:
             flip = False
         if self.facing == "right":
             flip = True
-        window.blit(
-            pygame.transform.scale(
-                pygame.transform.flip(
-                    self.sprite,flip,False
-                ),
-                (self.w * camera.scale, self.h * camera.scale)
-            ),
-            ((self.x - camera.x) * camera.scale,(self.y - camera.y) * camera.scale)
+        self.sprite.render(
+            flip,
+            (self.x - camera.x) * camera.scale,
+            (self.y - camera.y) * camera.scale,
+            self.w * camera.scale,
+            self.h * camera.scale
         )
 
     def physics(self):
+
         self.x += self.x_velocity+(self.x_velocity*delta_time)
 
         if self.x_velocity > 0:
@@ -116,17 +126,13 @@ class character:
         if math.floor(self.x_velocity) == 0:
             self.x_velocity = 0
 
-        ground = 40
-
         self.y -= self.y_velocity+(self.y_velocity*delta_time)
 
-        #print(self.collisions.get(self)[2])        
-        
         if self.collisions.get(self)[1]: # Air
             self.y_velocity -= 0.5
 
         if self.collisions.get(self)[2]: # Below Ground
-            self.y = ground - self.h
+            self.y += self.y_velocity+(self.y_velocity*delta_time)
             self.y_velocity = 0
 
         if self.collisions.get(self)[0]: # On ground
