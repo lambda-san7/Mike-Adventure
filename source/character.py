@@ -147,7 +147,7 @@ class character:
     def physics(self):
 
         if self.x_velocity > 0:
-            self.x_velocity -= 1
+            self.x_velocity -= 1 
         if self.x_velocity < 0:
             self.x_velocity += 1
         if math.floor(self.x_velocity) == 0:
