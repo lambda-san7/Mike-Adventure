@@ -12,6 +12,7 @@ from defaults import window, sprite, camera, delta_time
 
 class blocks_class:
     def __init__(self):
+        self.width = 10
         self.grass = sprite("grass.gif")
         self.dirt = sprite("dirt.gif")
 
@@ -51,18 +52,18 @@ class map:
                 if x == "#":
                     blocks.grass.render(
                         False,
-                        ((index_x*10) - camera.x) * camera.scale,
-                        ((index_y*10) - camera.y) * camera.scale,
-                        10 * camera.scale,
-                        10 * camera.scale
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width
                     )
                 if x == "&":
                     blocks.dirt.render(
                         False,
-                        ((index_x*10) - camera.x) * camera.scale,
-                        ((index_y*10) - camera.y) * camera.scale,
-                        10 * camera.scale,
-                        10 * camera.scale
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width
                     )
 
 testing = map()

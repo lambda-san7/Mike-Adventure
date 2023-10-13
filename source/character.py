@@ -5,7 +5,7 @@
 import pygame
 import math
 from defaults import window, sprite, camera, delta_time, colliding
-from map import curr_map
+from map import curr_map, blocks
 
 ######################
 # COLLISIONS
@@ -41,10 +41,10 @@ class collisions:
             for index_x, x in enumerate(curr_map.matrix[index_y]):
                 if x == "#" or x == "&":
                     if colliding.point(
-                        index_x * 10,
-                        index_y * 10,
-                        10,
-                        10,
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width,
                         (target.x + target.w) / 2,
                         target.y + target.h
                         ):
@@ -52,10 +52,10 @@ class collisions:
                         self.air = False
 
                     if colliding.point(
-                        index_x * 10,
-                        index_y * 10,
-                        10,
-                        10,
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width,
                         (target.x + target.w) / 2,
                         target.y
                         ):
@@ -63,10 +63,10 @@ class collisions:
                         self.air = False
 
                     if colliding.point(
-                        index_x * 10,
-                        index_y * 10,
-                        10,
-                        10,
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width,
                         target.x,
                         (target.y + target.h) / 2
                         ):
@@ -74,10 +74,10 @@ class collisions:
                         self.air = False
 
                     if colliding.point(
-                        index_x * 10,
-                        index_y * 10,
-                        10,
-                        10,
+                        ((index_x*blocks.width) - camera.x),
+                        ((index_y*blocks.width) - camera.y),
+                        blocks.width,
+                        blocks.width,
                         target.x + target.w,
                         (target.y + target.h) / 2
                         ):
@@ -124,9 +124,11 @@ class character:
         self.collisions = collisions()
  
     def handle(self,events):
-        camera.x = self.x - ((pygame.display.Info().current_w / camera.scale) / 2)
-        camera.y = (pygame.display.Info().current_h / camera.scale) - ((50 * camera.scale) / 2)
-        #camera.y = ((pygame.display.Info().current_h / camera.scale) - (5 * camera.scale))
+        #camera.x = self.x - ((pygame.display.Info().current_w) / 2)
+        #camera.y = (pygame.display.Info().current_h) - (50 / 2)
+        camera.x = self.x - ((pygame.display.Info().current_w) / 2)
+        camera.y = self.y - ((pygame.display.Info().current_h) / 2)
+        #camera.y = pygame.display.Info().current_h - 5 
         self.controller(events)
         self.physics()
         self.render()
@@ -138,16 +140,16 @@ class character:
             flip = True
         self.sprite.render(
             flip,
-            (self.x - camera.x) * camera.scale,
-            (self.y - camera.y) * camera.scale,
-            self.w * camera.scale,
-            self.h * camera.scale
+            (self.x - camera.x),
+            (self.y - camera.y),
+            self.w,
+            self.h
         )
 
     def physics(self):
 
         if self.x_velocity > 0:
-            self.x_velocity -= 1 
+            self.x_velocity -= 1
         if self.x_velocity < 0:
             self.x_velocity += 1
         if math.floor(self.x_velocity) == 0:
@@ -165,8 +167,8 @@ class character:
         
         self.x += self.x_velocity+(self.x_velocity*delta_time)
 
-        if self.collisions.get(self)[1]: # Air
-            self.y_velocity -= 0.5
+    #    if self.collisions.get(self)[1]: # Air
+     #       self.y_velocity -= 0.5
 
         if self.collisions.get(self)[2]: # top Ground
             if self.y_velocity < 0:
@@ -184,13 +186,15 @@ class character:
         self.y -= self.y_velocity+(self.y_velocity*delta_time)
             
     def controller(self,events):
-        if events[1] == "w":
-            self.y_velocity = self.jump
+        if events[0][pygame.K_w]:
+            #self.y_velocity = self.jump
+            self.y -= self.jump
         if events[0][pygame.K_a]:
             self.facing = "left"
             self.x_velocity = -self.speed
         if events[0][pygame.K_s]:
-            pass
+            #self.y_velocity = -self.jump
+            self.y += self.jump
         if events[0][pygame.K_d]:
             self.facing = "right"
             self.x_velocity = self.speed
